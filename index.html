@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" />
+    <title>Hi there!</title>
+    <script defer type="text/javascript">
+      let timerId;
+      onload = () => {
+        window.addEventListener("blur", () => {
+          document.title = "Come back :(";
+          timerId = setInterval(changeFavicon, 500);
+        });
+        window.addEventListener("focus", () => {
+          document.title = "Hi there";
+          clearInterval(timerId);
+        });
+      };
+      function changeFavicon() {
+        let canvas = document.createElement("canvas");
+        canvas.width = 16;
+        canvas.height = 16;
+        if (canvas.getContext) {
+          const ctx = canvas.getContext("2d");
+          const link = document.createElement("link");
+          const circle = new Path2D();
+          const [r, g, b] = [...getRandomRgb()];
+          circle.arc(8, 8, 8, 0, 2 * Math.PI);
+          ctx.fillStyle = `rgb(${r},${g},${b})`;
+          ctx.fill(circle);
+          link.type = "image/x-icon";
+          link.rel = "icon";
+          link.href = canvas.toDataURL("image/x-icon");
+          document.head.replaceChild(
+            link,
+            document.head.querySelector('link[rel="icon"]')
+          );
+        }
+      }
+      function getRandomRgb() {
+        const rgb = [];
+        for (let i = 0; i < 3; i++) {
+          rgb.push(Math.floor(Math.random() * 256));
+        }
+        return rgb;
+      }
+    </script>
+  </head>
+  <body></body>
+</html>
